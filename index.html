@@ -2,13 +2,210 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oleksii Buhaitsov</title>
+    <title>Memory</title>
+    <style>
+        img
+        {
+            height: 200px;
+            width: 200px;
+            position: absolute;
+            border: solid 2px yellow;
+        }
+
+        input
+        {
+            width: 600px; 
+            height: 50px; 
+            font-size: 30px; 
+            position: absolute; 
+            top: 100px; 
+            left: 300px; 
+            background-color: black; 
+            opacity: 0.8; 
+            color: yellow; 
+            border: solid 2px yellow;
+        }
+    </style>
+    <script src="jquery-3.6.0.js"></script>
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script>
+        let arr =[1,1,2,2,3,3,4,4,5,5,6,6,7,7,1,1,2,2,3,3];
+        function getRandomIntInclusive(min, max)
+        {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1) + min); 
+        }
+        function mixImg()
+        {
+            let a1;
+            let a2;
+            let tmp;
+            for(let i = 0; i<500;i++)
+            {
+                a1 = getRandomIntInclusive(0,19);
+                a2 = getRandomIntInclusive(0,19);
+                tmp = arr[a1];
+                arr[a1] = arr[a2];
+                arr[a2] = tmp;
+            }
+        }
+        function imgToPage()
+        {
+            for(let i = 0; i<20; i++)
+            {   
+                $("#i"+ i).attr("src", "img/"+arr[i]+".jpg");
+            }
+        }      
+        function checkWin()
+        {
+            if(countOpenImg == 10)
+            {
+            alert("Вы победили!");
+            mixImg();
+            imgToPage();
+            $("#butt").val("Start");
+            for(let i = 0; i<20; i++)
+            {
+                $("#r"+i).unbind('click');
+                $("#r"+i).show("fade",{}, 3000); 
+            } 
+            }
+        }
+
+    let countImgClick = 0;
+    let elem1;
+    let elem2;
+    let elemIndex1;
+    let elemIndex2;
+    let countOpenImg = 0;
+
+        $(document).ready(function () 
+            { 
+                $("#butt").bind("click",function (event) 
+                {
+                    if($("#butt").val()=="Start")
+                    {
+                        mixImg();
+                        imgToPage(); 
+                        for(let i = 0; i<20; i++)
+                        {
+                            $("#r"+i).hide("fade",{}, 1000);
+                            $("#r"+i).show("fade",{}, 3000); 
+                        }
+                        $("#butt").val("Finish");
+                        for(let i = 0; i<20; i++)
+                        {
+                            $("#r"+i).bind('click', function(e) 
+                            {
+                                $(this).hide("fade",{}, 1000);
+                                let index =parseInt($(this).attr("id").substr(1));
+                                if(countImgClick==0)
+                                {
+                                    elem1 = arr[index];
+                                    elemIndex1 = index;
+                                }  
+                                if(countImgClick==1)
+                                {
+                                    elem2 = arr[index];
+                                    elemIndex2 = index;
+                                }
+                                countImgClick++;
+                                if(countImgClick == 2 && elem1 != elem2)
+                                {
+                                    $("#r"+elemIndex1).show("fade", {}, 500);
+                                    $("#r"+elemIndex2).show("fade", {}, 500);
+                                    countImgClick= 0;
+                                }
+                                if(countImgClick == 2 && elem1 == elem2)
+                                {
+                                    countImgClick = 0;
+                                    countOpenImg++;
+                                    checkWin();
+                                }                           
+                            }); 
+                        } 
+                        return; 
+                    }
+                    
+                    if($(this).val()=="Finish")
+                    {
+                        $(this).val("Start");
+                        for(let i = 0; i<20; i++)
+                        {
+                            $("#r"+i).unbind('click');
+                            $("#r"+i).hide("fade",{}, 1000); 
+                        }
+                        countOpenImg = 0;
+                        countImgClick = 0;
+                    }
+                });                                   
+            });
+    </script>
 </head>
-<body>
-    <h1 style="color: red;">Oleksii Buhaitsov</h1>
-    <h2>Hola!!!</h2>  
-    <h2 style="color: green;">Evgenia Buhaitsova</h2> 
-    <h3>Hola!</h3>
+<body style="text-align: center; background-color: black;">   
+            <div style="position: absolute; top: 50px; left: 50px; width: 1100px; height: 1000px; border: solid 2px yellow;background-image: url(img/back.jpg);"></div>       
+            <input type="button" value="Start" id="butt">  
+            <img style="left: 100px; top: 200px;" id="i0" alt="picture" src="img/1.jpg">
+            <img style="left: 100px; top: 200px;" id="r0" alt="picture" src="img/R1.jpg">
+            
+            <img style="left: 300px; top: 200px;" id="i1" alt="picture" src="img/2.jpg">
+            <img style="left: 300px; top: 200px;" id="r1" alt="picture" src="img/R2.jpg">
+            
+            <img style="left: 500px; top: 200px;" id="i2" alt="picture" src="img/3.jpg">
+            <img style="left: 500px; top: 200px;" id="r2" alt="picture" src="img/R3.jpg">
+            
+            <img style="left: 700px; top: 200px;" id="i3" alt="picture" src="img/4.jpg">
+            <img style="left: 700px; top: 200px;" id="r3" alt="picture" src="img/R4.jpg">
+            
+            <img style="left: 900px; top: 200px;" id="i4" alt="picture" src="img/5.jpg">
+            <img style="left: 900px; top: 200px;" id="r4" alt="picture" src="img/R5.jpg">      
+            
+            <img style="left: 100px; top: 400px;" id="i5" alt="picture" src="img/6.jpg">
+            <img style="left: 100px; top: 400px;" id="r5" alt="picture" src="img/R6.jpg">
+            
+            <img style="left: 300px; top: 400px;" id="i6" alt="picture" src="img/7.jpg">
+            <img style="left: 300px; top: 400px;" id="r6" alt="picture" src="img/R7.jpg">
+            
+            <img style="left: 500px; top: 400px;" id="i7" alt="picture" src="img/1.jpg">
+            <img style="left: 500px; top: 400px;" id="r7" alt="picture" src="img/R8.jpg">
+            
+            <img style="left: 700px; top: 400px;" id="i8" alt="picture" src="img/2.jpg">
+            <img style="left: 700px; top: 400px;" id="r8" alt="picture" src="img/R9.jpg">
+            
+            <img style="left: 900px; top: 400px;" id="i9" alt="picture" src="img/3.jpg">
+            <img style="left: 900px; top: 400px;" id="r9" alt="picture" src="img/R10.jpg">
+            
+            <img style="left: 100px; top: 600px;" id="i10" alt="picture" src="img/3.jpg">
+            <img style="left: 100px; top: 600px;" id="r10" alt="picture" src="img/R11.jpg">
+            
+            <img style="left: 300px; top: 600px;" id="i11" alt="picture" src="img/2.jpg">
+            <img style="left: 300px; top: 600px;" id="r11" alt="picture" src="img/R12.jpg">
+            
+            <img style="left: 500px; top: 600px;" id="i12" alt="picture" src="img/1.jpg">
+            <img style="left: 500px; top: 600px;" id="r12" alt="picture" src="img/R13.jpg">
+            
+            <img style="left: 700px; top: 600px;" id="i13" alt="picture" src="img/7.jpg">
+            <img style="left: 700px; top: 600px;" id="r13" alt="picture" src="img/R14.jpg">
+            
+            <img style="left: 900px; top: 600px;" id="i14" alt="picture" src="img/6.jpg">
+            <img style="left: 900px; top: 600px;" id="r14" alt="picture" src="img/R15.jpg">
+            
+            <img style="left: 100px; top: 800px;" id="i15" alt="picture" src="img/5.jpg">
+            <img style="left: 100px; top: 800px;" id="r15" alt="picture" src="img/R16.jpg">
+            
+            <img style="left: 300px; top: 800px;" id="i16" alt="picture" src="img/4.jpg">
+            <img style="left: 300px; top: 800px;" id="r16" alt="picture" src="img/R17.jpg">
+            
+            <img style="left: 500px; top: 800px;" id="i17" alt="picture" src="img/3.jpg">
+            <img style="left: 500px; top: 800px;" id="r17" alt="picture" src="img/R18.jpg">
+            
+            <img style="left: 700px; top: 800px;" id="i18" alt="picture" src="img/2.jpg">
+            <img style="left: 700px; top: 800px;" id="r18" alt="picture" src="img/R19.jpg">
+            
+            <img style="left: 900px; top: 800px;" id="i19" alt="picture" src="img/1.jpg">
+            <img style="left: 900px; top: 800px;" id="r19" alt="picture" src="img/R20.jpg">  
 </body>
 </html>
